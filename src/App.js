@@ -82,8 +82,9 @@ export default function App() {
 
   // Effet n°2 : La logique pour charger les données CSV
   useEffect(() => {
+    const csvFilePath = `${process.env.PUBLIC_URL}/data/couvertures-vaccinales-des-adolescents-et-adultes-depuis-2011-region.csv`;
     Papa.parse(
-      "/data/couvertures-vaccinales-des-adolescents-et-adultes-depuis-2011-region.csv",
+      csvFilePath,
       {
         download: true,
         header: true,

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import './accueil.css'; 
+import monLogo from '../src/assets/ministeredelasante2.png'
 
 // --- RÉGLAGES DES FICHIERS ---
-const LOGO_URL = '/ministeredelasante2.png'; // Assurez-vous que l'image est dans le dossier /public
+const LOGO_URL = monLogo; // Utilisation de l'importation du logo
 const TITLE = "Panneau Ministère de la Santé";
 
 function Accueil({ isLogoExiting, visibleLetterCount }) {
