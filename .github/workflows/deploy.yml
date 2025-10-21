@@ -1,0 +1,64 @@
+# Nom du pipeline
+name: Deploy React App to GitHub Pages
+
+on:
+  # Se déclenche à chaque push sur la branche 'main'
+  push:
+    branches: [ "main" ]
+  # Permet de lancer ce pipeline manuellement depuis l'onglet Actions
+  workflow_dispatch:
+
+# Autorisations nécessaires pour que le pipeline puisse écrire sur GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Permet un seul déploiement à la fois. Annule les déploiements précédents si un nouveau push est fait.
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  # Job unique de build et déploiement
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }} # URL de sortie du site
+
+    steps:
+      #  Récupère votre code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      #  Configure Node.js (mettez la version que vous utilisez)
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18' # Ou 16, 20, etc.
+          cache: 'npm'
+
+      #  Installe les dépendances
+      - name: Install dependencies
+        run: npm ci  # 'ci' est plus rapide et plus sûr que 'install' pour les pipelines
+
+      #  Construit l'application (lance le script "build" de package.json)
+      - name: Build project
+        run: npm run build # Cela crée le dossier 'build'
+
+      #  Prépare l'artefact (le dossier 'build') pour le déploiement
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      #  Télécharge le dossier 'build' comme un artefact GitHub Pages
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Chemin vers le dossier généré par 'npm run build'
+          path: './build'
+          
+      #  Déploie l'artefact sur GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,6 +1,7 @@
 {
   "name": "hackathon-map",
   "version": "0.1.0",
+  "homepage": "https://mawed44.github.io/prediction-vaccin-covid",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
